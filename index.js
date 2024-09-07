@@ -4,6 +4,9 @@ require("dotenv").config();
 // Importamos el módulo de Express
 const express = require("express");
 
+// Módulo para manejar rutas de archivos
+const path = require("path");
+
 // Creamos una instancia de la aplicación
 const app = express();
 
@@ -23,6 +26,11 @@ const cursos = [
   { id: 1, nombre: "Curso de Node.js", duracion: "4 semanas" },
   { id: 2, nombre: "Curso de React", duracion: "6 semanas" },
 ];
+
+// Creamos una ruta de ejemplo
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "index.html"));
+});
 
 // Ruta estudiantes
 app.get("/estudiantes", (req, res) => {

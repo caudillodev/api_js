@@ -54,6 +54,72 @@ app.get("/estudiante/:id", (req, res) => {
   });
 });
 
+// Ruta para crear un nuevo estudiante
+app.post("/estudiantes", (req, res) => {
+  const { nombre, edad } = req.body; // Datos proporcionados por el cliente
+
+  // Validamos que los datos obligatorios estén presentes
+  if (!nombre || !edad) {
+    return res
+      .status(400)
+      .json({ error: "El nombre y la edad son requeridos" });
+  }
+
+  // Creamos el nuevo estudiante
+  const nuevoEstudiante = {
+    id: estudiantes.length + 1, // Generamos un nuevo ID de forma incremental
+    nombre,
+    edad,
+  };
+
+  // Ruta para actualizar un estudiante
+  app.put("/estudiante/:id", (req, res) => {
+    const { id } = req.params;
+    const { nombre, edad } = req.body;
+
+    const estudiante = estudiantes.find((e) => e.id === parseInt(id));
+
+    if (!estudiante) {
+      return res.status(404).json({ error: "Estudiante no encontrado" });
+    }
+
+    // Actualizamos los datos del estudiante
+    estudiante.nombre = nombre || estudiante.nombre;
+    estudiante.edad = edad || estudiante.edad;
+
+    res.json({
+      mensaje: `Estudiante con ID: ${id} actualizado exitosamente`,
+      estudiante,
+    });
+  });
+
+  // Agregamos el nuevo estudiante al array de estudiantes
+  estudiantes.push(nuevoEstudiante);
+
+  // Devolvemos una respuesta exitosa con el estudiante creado
+  res.status(201).json({
+    mensaje: "Estudiante creado exitosamente",
+    estudiante: nuevoEstudiante,
+  });
+});
+
+// Ruta para eliminar un estudiante
+app.delete("/estudiante/:id", (req, res) => {
+  const { id } = req.params;
+  const indice = estudiantes.findIndex((e) => e.id === parseInt(id));
+
+  if (indice === -1) {
+    return res.status(404).json({ error: "Estudiante no encontrado" });
+  }
+
+  // Eliminamos el estudiante del array
+  estudiantes.splice(indice, 1);
+
+  res.json({
+    mensaje: `Estudiante con ID: ${id} eliminado exitosamente`,
+  });
+});
+
 // Ruta cursos
 app.get("/cursos", (req, res) => {
   res.json({ mensaje: "Lista de cursos", cursos });
@@ -73,6 +139,66 @@ app.get("/curso/:id", (req, res) => {
   res.json({
     mensaje: `Información del curso con ID: ${id}`,
     curso: curso,
+  });
+});
+
+// Ruta para crear un nuevo curso
+app.post("/cursos", (req, res) => {
+  const { nombre, duracion } = req.body;
+
+  if (!nombre || !duracion) {
+    return res
+      .status(400)
+      .json({ error: "El nombre y la duración son requeridos" });
+  }
+
+  const nuevoCurso = {
+    id: cursos.length + 1,
+    nombre,
+    duracion,
+  };
+
+  cursos.push(nuevoCurso);
+
+  res.status(201).json({
+    mensaje: "Curso creado exitosamente",
+    curso: nuevoCurso,
+  });
+});
+
+// Ruta para actualizar un curso
+app.put("/curso/:id", (req, res) => {
+  const { id } = req.params;
+  const { nombre, duracion } = req.body;
+
+  const curso = cursos.find((c) => c.id === parseInt(id));
+
+  if (!curso) {
+    return res.status(404).json({ error: "Curso no encontrado" });
+  }
+
+  curso.nombre = nombre || curso.nombre;
+  curso.duracion = duracion || curso.duracion;
+
+  res.json({
+    mensaje: `Curso con ID: ${id} actualizado exitosamente`,
+    curso,
+  });
+});
+
+// Ruta para eliminar un curso
+app.delete("/curso/:id", (req, res) => {
+  const { id } = req.params;
+  const indice = cursos.findIndex((c) => c.id === parseInt(id));
+
+  if (indice === -1) {
+    return res.status(404).json({ error: "Curso no encontrado" });
+  }
+
+  cursos.splice(indice, 1);
+
+  res.json({
+    mensaje: `Curso con ID: ${id} eliminado exitosamente`,
   });
 });
 

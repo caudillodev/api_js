@@ -20,14 +20,14 @@ const obtenerCursos = (req, res) => {
  *  - Si no se encuentra el curso: Un mensaje de error con el código 404.
  */
 const obtenerCursoPorId = (req, res) => {
-  const { id } = req.params;
-  const curso = cursos.find((c) => c.id === parseInt(id));
+  const idCurso = parseInt(req.params.id)
+  const curso = cursos.find((c) => c.id === idCurso);
 
   if (!curso) {
     return res.status(404).json({ error: "Curso no encontrado" });
   }
 
-  res.json({ mensaje: `Información del curso con ID: ${id}`, curso });
+  res.json({ mensaje: `Información del curso con ID: ${idCurso}`, curso });
 };
 
 /**

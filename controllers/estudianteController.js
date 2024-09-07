@@ -20,14 +20,14 @@ const obtenerEstudiantes = (req, res) => {
  *  - Si no se encuentra el estudiante: Un mensaje de error con el código 404.
  */
 const obtenerEstudiantePorId = (req, res) => {
-  const { id } = req.params;
-  const estudiante = estudiantes.find((e) => e.id === parseInt(id));
+  const idEstudiante = parseInt(req.params.id)
+  const estudiante = estudiantes.find((e) => e.id === idEstudiante);
 
   if (!estudiante) {
     return res.status(404).json({ error: "Estudiante no encontrado" });
   }
 
-  res.json({ mensaje: `Información del estudiante con ID: ${id}`, estudiante });
+  res.json({ mensaje: `Información del estudiante con ID: ${idEstudiante}`, estudiante });
 };
 
 /**

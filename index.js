@@ -21,6 +21,14 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
 });
 
+// Importar las rutas de los recursos (estudiantes y cursos)
+const estudianteRoutes = require("./routes/estudianteRoutes");
+const cursoRoutes = require("./routes/cursoRoutes");
+
+// Usar las rutas de los recursos (estudiantes y cursos)
+app.use("/estudiantes", estudianteRoutes);
+app.use("/cursos", cursoRoutes);
+
 // Iniciamos el servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);

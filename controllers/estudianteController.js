@@ -2,12 +2,12 @@
 const estudiantes = require("../models/estudianteModel");
 
 // Ruta estudiantes
-app.get(obtenerEstudiantes, (req, res) => {
+const obtenerEstudiantes = (req, res) => {
   res.json({ mensaje: "Lista de estudiantes", estudiantes });
-});
+};
 
-// Ruta estudiantes por ID
-app.get(obtenerEstudiantePorID, (req, res) => {
+// Ruta estudiantes por Id
+const obtenerEstudiantePorId = (req, res) => {
   const { id } = req.params; // Extraemos el parámetro 'id' de la URL
   const estudiante = estudiantes.find((e) => e.id === parseInt(id)); // Buscamos el estudiante por ID
 
@@ -21,10 +21,10 @@ app.get(obtenerEstudiantePorID, (req, res) => {
     mensaje: `Información del estudiante con ID: ${id}`,
     estudiante: estudiante,
   });
-});
+};
 
 // Ruta para crear un nuevo estudiante
-app.post(crearEstudiante, (req, res) => {
+const crearEstudiante = (req, res) => {
   const { nombre, edad } = req.body; // Datos proporcionados por el cliente
 
   // Validamos que los datos obligatorios estén presentes
@@ -41,27 +41,6 @@ app.post(crearEstudiante, (req, res) => {
     edad,
   };
 
-  // Ruta para actualizar un estudiante
-  app.put(actualizarEstudiante, (req, res) => {
-    const { id } = req.params;
-    const { nombre, edad } = req.body;
-
-    const estudiante = estudiantes.find((e) => e.id === parseInt(id));
-
-    if (!estudiante) {
-      return res.status(404).json({ error: "Estudiante no encontrado" });
-    }
-
-    // Actualizamos los datos del estudiante
-    estudiante.nombre = nombre || estudiante.nombre;
-    estudiante.edad = edad || estudiante.edad;
-
-    res.json({
-      mensaje: `Estudiante con ID: ${id} actualizado exitosamente`,
-      estudiante,
-    });
-  });
-
   // Agregamos el nuevo estudiante al array de estudiantes
   estudiantes.push(nuevoEstudiante);
 
@@ -70,10 +49,31 @@ app.post(crearEstudiante, (req, res) => {
     mensaje: "Estudiante creado exitosamente",
     estudiante: nuevoEstudiante,
   });
-});
+};
+
+// Ruta para actualizar un estudiante
+const actualizarEstudiante = (req, res) => {
+  const { id } = req.params;
+  const { nombre, edad } = req.body;
+
+  const estudiante = estudiantes.find((e) => e.id === parseInt(id));
+
+  if (!estudiante) {
+    return res.status(404).json({ error: "Estudiante no encontrado" });
+  }
+
+  // Actualizamos los datos del estudiante
+  estudiante.nombre = nombre || estudiante.nombre;
+  estudiante.edad = edad || estudiante.edad;
+
+  res.json({
+    mensaje: `Estudiante con ID: ${id} actualizado exitosamente`,
+    estudiante,
+  });
+};
 
 // Ruta para eliminar un estudiante
-app.delete(eliminarEstudiante, (req, res) => {
+const eliminarEstudiante = (req, res) => {
   const { id } = req.params;
   const indice = estudiantes.findIndex((e) => e.id === parseInt(id));
 
@@ -87,7 +87,7 @@ app.delete(eliminarEstudiante, (req, res) => {
   res.json({
     mensaje: `Estudiante con ID: ${id} eliminado exitosamente`,
   });
-});
+};
 
 module.exports = {
   obtenerEstudiantes,

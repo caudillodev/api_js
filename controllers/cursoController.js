@@ -2,12 +2,12 @@
 const cursos = require("../models/cursoModel");
 
 // Ruta cursos
-app.get(obtenerCursos, (req, res) => {
+const obtenerCursos = (req, res) => {
   res.json({ mensaje: "Lista de cursos", cursos });
-});
+};
 
 // Ruta cursos por ID
-app.get(obtenerCursosPorID, (req, res) => {
+const obtenerCursoPorId = (req, res) => {
   const { id } = req.params; // Extraemos el parámetro 'id' de la URL
   const curso = cursos.find((e) => e.id === parseInt(id)); // Buscamos el curso por ID
 
@@ -21,10 +21,10 @@ app.get(obtenerCursosPorID, (req, res) => {
     mensaje: `Información del curso con ID: ${id}`,
     curso: curso,
   });
-});
+};
 
 // Ruta para crear un nuevo curso
-app.post(crearCurso, (req, res) => {
+const crearCurso = (req, res) => {
   const { nombre, duracion } = req.body;
 
   if (!nombre || !duracion) {
@@ -45,10 +45,10 @@ app.post(crearCurso, (req, res) => {
     mensaje: "Curso creado exitosamente",
     curso: nuevoCurso,
   });
-});
+};
 
 // Ruta para actualizar un curso
-app.put(actualizarCurso, (req, res) => {
+const actualizarCurso = (req, res) => {
   const { id } = req.params;
   const { nombre, duracion } = req.body;
 
@@ -65,10 +65,10 @@ app.put(actualizarCurso, (req, res) => {
     mensaje: `Curso con ID: ${id} actualizado exitosamente`,
     curso,
   });
-});
+};
 
 // Ruta para eliminar un curso
-app.delete(eliminarCurso, (req, res) => {
+const eliminarCurso = (req, res) => {
   const { id } = req.params;
   const indice = cursos.findIndex((c) => c.id === parseInt(id));
 
@@ -81,11 +81,11 @@ app.delete(eliminarCurso, (req, res) => {
   res.json({
     mensaje: `Curso con ID: ${id} eliminado exitosamente`,
   });
-});
+};
 
 module.exports = {
   obtenerCursos,
-  obtenerCursosPorID,
+  obtenerCursoPorId,
   crearCurso,
   actualizarCurso,
   eliminarCurso,

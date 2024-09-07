@@ -88,3 +88,11 @@ app.delete(eliminarEstudiante, (req, res) => {
     mensaje: `Estudiante con ID: ${id} eliminado exitosamente`,
   });
 });
+
+module.exports = {
+  obtenerEstudiantes,
+  obtenerEstudiantePorId,
+  crearEstudiante,
+  actualizarEstudiante,
+  eliminarEstudiante,
+};

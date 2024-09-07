@@ -46,6 +46,28 @@ app.get("/estudiante/:id", (req, res) => {
   });
 });
 
+// Ruta cursos
+app.get("/cursos", (req, res) => {
+  res.json({ mensaje: "Lista de cursos", cursos });
+});
+
+// Ruta cursos por ID
+app.get("/curso/:id", (req, res) => {
+  const { id } = req.params; // Extraemos el parámetro 'id' de la URL
+  const curso = cursos.find((e) => e.id === parseInt(id)); // Buscamos el curso por ID
+
+  if (!curso) {
+    // Si no se encuentra el curso, devolvemos un error 404
+    return res.status(404).json({ error: "Curso no encontrado" });
+  }
+
+  // Si se encuentra el curso, devolvemos la información
+  res.json({
+    mensaje: `Información del curso con ID: ${id}`,
+    curso: curso,
+  });
+});
+
 // Iniciamos el servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);

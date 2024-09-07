@@ -1,29 +1,43 @@
-// Importamos el módulo cursos
+// Importa el módulo de modelo de curso desde el archivo cursoModel en el directorio 'models'
 const cursos = require("../models/cursoModel");
 
-// Ruta cursos
+/**
+ * Ruta: GET /cursos
+ * Descripción: Devuelve la lista completa de cursos.
+ * Respuesta: Un objeto JSON que contiene un mensaje y la lista de cursos.
+ */
 const obtenerCursos = (req, res) => {
   res.json({ mensaje: "Lista de cursos", cursos });
 };
 
-// Ruta cursos por ID
+/**
+ * Ruta: GET /curso/:id
+ * Descripción: Devuelve la información de un curso según su ID.
+ * Parámetros:
+ *  - id (requerido): El ID del curso que se desea obtener.
+ * Respuesta:
+ *  - Si el curso es encontrado: Un objeto JSON con un mensaje y la información del curso.
+ *  - Si no se encuentra el curso: Un mensaje de error con el código 404.
+ */
 const obtenerCursoPorId = (req, res) => {
-  const { id } = req.params; // Extraemos el parámetro 'id' de la URL
-  const curso = cursos.find((e) => e.id === parseInt(id)); // Buscamos el curso por ID
+  const { id } = req.params;
+  const curso = cursos.find((c) => c.id === parseInt(id));
 
   if (!curso) {
-    // Si no se encuentra el curso, devolvemos un error 404
     return res.status(404).json({ error: "Curso no encontrado" });
   }
 
-  // Si se encuentra el curso, devolvemos la información
-  res.json({
-    mensaje: `Información del curso con ID: ${id}`,
-    curso: curso,
-  });
+  res.json({ mensaje: `Información del curso con ID: ${id}`, curso });
 };
 
-// Ruta para crear un nuevo curso
+/**
+ * Ruta: POST /cursos
+ * Descripción: Crea un nuevo curso con los datos proporcionados.
+ * Cuerpo de la solicitud:
+ *  - nombre (requerido): El nombre del curso.
+ *  - duracion (requerido): La duración del curso.
+ * Respuesta: Un objeto JSON que contiene un mensaje y los detalles del curso recién creado.
+ */
 const crearCurso = (req, res) => {
   const { nombre, duracion } = req.body;
 
@@ -41,13 +55,23 @@ const crearCurso = (req, res) => {
 
   cursos.push(nuevoCurso);
 
-  res.status(201).json({
-    mensaje: "Curso creado exitosamente",
-    curso: nuevoCurso,
-  });
+  res
+    .status(201)
+    .json({ mensaje: "Curso creado exitosamente", curso: nuevoCurso });
 };
 
-// Ruta para actualizar un curso
+/**
+ * Ruta: PUT /curso/:id
+ * Descripción: Actualiza los datos de un curso existente.
+ * Parámetros:
+ *  - id (requerido): El ID del curso que se desea actualizar.
+ * Cuerpo de la solicitud:
+ *  - nombre: El nuevo nombre del curso.
+ *  - duracion: La nueva duración del curso.
+ * Respuesta:
+ *  - Si el curso es encontrado y actualizado: Un objeto JSON con el mensaje y los datos actualizados.
+ *  - Si no se encuentra el curso: Un mensaje de error con el código 404.
+ */
 const actualizarCurso = (req, res) => {
   const { id } = req.params;
   const { nombre, duracion } = req.body;
@@ -61,13 +85,18 @@ const actualizarCurso = (req, res) => {
   curso.nombre = nombre || curso.nombre;
   curso.duracion = duracion || curso.duracion;
 
-  res.json({
-    mensaje: `Curso con ID: ${id} actualizado exitosamente`,
-    curso,
-  });
+  res.json({ mensaje: `Curso con ID: ${id} actualizado exitosamente`, curso });
 };
 
-// Ruta para eliminar un curso
+/**
+ * Ruta: DELETE /curso/:id
+ * Descripción: Elimina un curso de la lista según su ID.
+ * Parámetros:
+ *  - id (requerido): El ID del curso que se desea eliminar.
+ * Respuesta:
+ *  - Si el curso es encontrado y eliminado: Un objeto JSON con el mensaje de éxito.
+ *  - Si no se encuentra el curso: Un mensaje de error con el código 404.
+ */
 const eliminarCurso = (req, res) => {
   const { id } = req.params;
   const indice = cursos.findIndex((c) => c.id === parseInt(id));
@@ -78,11 +107,10 @@ const eliminarCurso = (req, res) => {
 
   cursos.splice(indice, 1);
 
-  res.json({
-    mensaje: `Curso con ID: ${id} eliminado exitosamente`,
-  });
+  res.json({ mensaje: `Curso con ID: ${id} eliminado exitosamente` });
 };
 
+// Exporta los controladores para ser utilizados en las rutas
 module.exports = {
   obtenerCursos,
   obtenerCursoPorId,
